@@ -885,13 +885,13 @@ void Test_HK_AppPipe_CombinedPktLengthOk(void)
     uint8           call_count_HK_SendCombinedHKPacket;
     size_t          forced_Size  = sizeof(HK_SendCombinedPktCmd_t);
     CFE_SB_MsgId_t  forced_MsgID = CFE_SB_ValueToMsgId(HK_SEND_COMBINED_PKT_MID);
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &forced_MsgID, sizeof(forced_MsgID), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_CFE_EVS_SendEvent       = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
     call_count_HK_SendCombinedHKPacket = UT_GetStubCount(UT_KEY(HK_SendCombinedHkPacket));
@@ -913,7 +913,7 @@ void Test_HK_AppPipe_CombinedPktBadLength(void)
     uint8           call_count_HK_SendCombinedHKPacket;
     size_t          forced_Size  = sizeof(HK_SendCombinedPktCmd_t) + 1;
     CFE_SB_MsgId_t  forced_MsgID = CFE_SB_ValueToMsgId(HK_SEND_COMBINED_PKT_MID);
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
@@ -924,7 +924,7 @@ void Test_HK_AppPipe_CombinedPktBadLength(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_CFE_EVS_SendEvent       = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
     call_count_HK_SendCombinedHKPacket = UT_GetStubCount(UT_KEY(HK_SendCombinedHkPacket));
@@ -955,7 +955,7 @@ void Test_HK_AppPipe_HkReqLengthOk(void)
     uint8           call_count_CFE_SB_TransmitMsg;
     size_t          forced_Size  = sizeof(HK_SendHkCmd_t);
     CFE_SB_MsgId_t  forced_MsgID = CFE_SB_ValueToMsgId(HK_SEND_HK_MID);
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     UT_SetDefaultReturnValue(UT_KEY(HK_CheckStatusOfTables), HK_SUCCESS);
 
@@ -963,7 +963,7 @@ void Test_HK_AppPipe_HkReqLengthOk(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_CFE_EVS_SendEvent  = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
     call_count_CFE_SB_TransmitMsg = UT_GetStubCount(UT_KEY(CFE_SB_TransmitMsg));
@@ -990,7 +990,7 @@ void Test_HK_AppPipe_HkReqBadLength(void)
     uint8           call_count_CFE_SB_TransmitMsg;
     size_t          forced_Size  = sizeof(HK_SendHkCmd_t) + 1;
     CFE_SB_MsgId_t  forced_MsgID = CFE_SB_ValueToMsgId(HK_SEND_HK_MID);
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
@@ -1001,7 +1001,7 @@ void Test_HK_AppPipe_HkReqBadLength(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_CFE_EVS_SendEvent  = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
     call_count_CFE_SB_TransmitMsg = UT_GetStubCount(UT_KEY(CFE_SB_TransmitMsg));
@@ -1034,7 +1034,7 @@ void Test_HK_AppPipe_HkReqBadTblStatus(void)
     /* Arrange */
     size_t          forced_Size  = sizeof(HK_SendHkCmd_t);
     CFE_SB_MsgId_t  forced_MsgID = CFE_SB_ValueToMsgId(HK_SEND_HK_MID);
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     UT_SetDefaultReturnValue(UT_KEY(HK_CheckStatusOfTables), !HK_SUCCESS);
 
@@ -1042,7 +1042,7 @@ void Test_HK_AppPipe_HkReqBadTblStatus(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1064,14 +1064,14 @@ void Test_HK_AppPipe_NoopCmd(void)
     size_t            forced_Size    = sizeof(HK_NoopCmd_t);
     CFE_SB_MsgId_t    forced_MsgID   = CFE_SB_ValueToMsgId(HK_CMD_MID);
     CFE_MSG_FcnCode_t forced_CmdCode = HK_NOOP_CC;
-    CFE_SB_Buffer_t   DummyBuf;
+    CFE_SB_Buffer_t   Buf;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &forced_CmdCode, sizeof(forced_CmdCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &forced_MsgID, sizeof(forced_MsgID), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1092,14 +1092,14 @@ void Test_HK_AppPipe_ResetCmd(void)
     size_t            forced_Size    = sizeof(HK_ResetCountersCmd_t);
     CFE_SB_MsgId_t    forced_MsgID   = CFE_SB_ValueToMsgId(HK_CMD_MID);
     CFE_MSG_FcnCode_t forced_CmdCode = HK_RESET_CC;
-    CFE_SB_Buffer_t   DummyBuf;
+    CFE_SB_Buffer_t   Buf;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &forced_CmdCode, sizeof(forced_CmdCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &forced_MsgID, sizeof(forced_MsgID), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1120,7 +1120,7 @@ void Test_HK_AppPipe_UnknownCmd(void)
     size_t            forced_Size    = sizeof(HK_NoopCmd_t);
     CFE_SB_MsgId_t    forced_MsgID   = CFE_SB_ValueToMsgId(HK_CMD_MID);
     CFE_MSG_FcnCode_t forced_CmdCode = 47; /* unknown CC */
-    CFE_SB_Buffer_t   DummyBuf;
+    CFE_SB_Buffer_t   Buf;
 
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
@@ -1132,7 +1132,7 @@ void Test_HK_AppPipe_UnknownCmd(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1162,13 +1162,13 @@ void Test_HK_AppPipe_ProcessIncoming(void)
     uint8           call_count_HK_ProcessIncomingHkData;
     size_t          forced_Size  = sizeof(HK_NoopCmd_t);
     CFE_SB_MsgId_t  forced_MsgID = HK_UT_MID_100; /* Non HK MID */
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &forced_MsgID, sizeof(forced_MsgID), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    HK_AppPipe(&DummyBuf);
+    HK_AppPipe(&Buf);
 
     call_count_HK_ProcessIncomingHkData = UT_GetStubCount(UT_KEY(HK_ProcessIncomingHkData));
 
@@ -1220,7 +1220,7 @@ void Test_HK_SendCombinedHKCmd(void)
 void Test_HK_HousekeepingCmd(void)
 {
     /* Arrange */
-    CFE_MSG_CommandHeader_t DummyMsg;
+    CFE_MSG_CommandHeader_t Msg;
     uint8                   call_count_CFE_SB_TimeStampMsg;
     uint8                   call_count_CFE_SB_TransmitMsg;
 
@@ -1231,10 +1231,10 @@ void Test_HK_HousekeepingCmd(void)
     HK_AppData.CombinedPacketsSent = 4;
     HK_AppData.MemPoolHandle       = HK_UT_MEMPOOL_1;
 
-    memset(&DummyMsg, 0, sizeof(DummyMsg));
+    memset(&Msg, 0, sizeof(Msg));
 
     /* Act */
-    HK_HousekeepingCmd(&DummyMsg);
+    HK_HousekeepingCmd(&Msg);
 
     call_count_CFE_SB_TimeStampMsg = UT_GetStubCount(UT_KEY(CFE_SB_TimeStampMsg));
     call_count_CFE_SB_TransmitMsg  = UT_GetStubCount(UT_KEY(CFE_SB_TransmitMsg));
@@ -1266,7 +1266,7 @@ void Test_HK_HousekeepingCmd(void)
 void Test_HK_NoopCmd_LengthOk(void)
 {
     /* Arrange */
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
     int32           strCmpResult;
     char            ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
     snprintf(ExpectedEventString, CFE_MISSION_EVS_MAX_MESSAGE_LENGTH, "HK No-op command, Version %%d.%%d.%%d.%%d");
@@ -1274,7 +1274,7 @@ void Test_HK_NoopCmd_LengthOk(void)
     UT_SetDefaultReturnValue(UT_KEY(HK_VerifyCmdLength), CFE_SUCCESS);
 
     /* Act */
-    HK_NoopCmd(&DummyBuf);
+    HK_NoopCmd(&Buf);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1302,12 +1302,12 @@ void Test_HK_NoopCmd_LengthOk(void)
 void Test_HK_NoopCmd_LengthError(void)
 {
     /* Arrange */
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     UT_SetDefaultReturnValue(UT_KEY(HK_VerifyCmdLength), HK_BAD_MSG_LENGTH_RC);
 
     /* Act */
-    HK_NoopCmd(&DummyBuf);
+    HK_NoopCmd(&Buf);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1332,7 +1332,7 @@ void Test_HK_NoopCmd_LengthError(void)
 void Test_HK_ResetCtrsCmd_LengthOk(void)
 {
     /* Arrange */
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     int32 strCmpResult;
     char  ExpectedEventString[CFE_MISSION_EVS_MAX_MESSAGE_LENGTH];
@@ -1341,7 +1341,7 @@ void Test_HK_ResetCtrsCmd_LengthOk(void)
     UT_SetDefaultReturnValue(UT_KEY(HK_VerifyCmdLength), CFE_SUCCESS);
 
     /* Act */
-    HK_ResetCtrsCmd(&DummyBuf);
+    HK_ResetCtrsCmd(&Buf);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1370,12 +1370,12 @@ void Test_HK_ResetCtrsCmd_LengthOk(void)
 void Test_HK_ResetCtrsCmd_LengthError(void)
 {
     /* Arrange */
-    CFE_SB_Buffer_t DummyBuf;
+    CFE_SB_Buffer_t Buf;
 
     UT_SetDefaultReturnValue(UT_KEY(HK_VerifyCmdLength), HK_BAD_MSG_LENGTH_RC);
 
     /* Act */
-    HK_ResetCtrsCmd(&DummyBuf);
+    HK_ResetCtrsCmd(&Buf);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 

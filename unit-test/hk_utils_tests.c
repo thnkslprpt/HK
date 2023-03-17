@@ -972,14 +972,14 @@ void Test_HK_TearDownOldCopyTable_Success2(void)
     /* Arrange */
     int32                  ReturnValue;
     int32                  i;
-    CFE_SB_Buffer_t        DummyBuffer;
+    CFE_SB_Buffer_t        Buffer;
     hk_runtime_tbl_entry_t RtTblPtr[HK_COPY_TABLE_ENTRIES];
     hk_copy_table_entry_t  CopyTblPtr[HK_COPY_TABLE_ENTRIES];
 
     HK_Test_InitGoodCopyTable(CopyTblPtr);
     HK_Test_InitGoodRuntimeTable(RtTblPtr);
 
-    RtTblPtr[4].OutputPktAddr = &DummyBuffer; /* Just needs to not match the
+    RtTblPtr[4].OutputPktAddr = &Buffer; /* Just needs to not match the
                                       other filled entries */
 
     /* Act */
@@ -1147,9 +1147,9 @@ void Test_HK_SendCombinedHkPacket_PacketNotFound(void)
     HK_Test_InitEmptyCopyTable(CopyTblPtr);
     HK_Test_InitEmptyRuntimeTable(RtTblPtr);
 
-    CFE_SB_Buffer_t DummyBuffer;
+    CFE_SB_Buffer_t Buffer;
     /* populate one entry in the RT table */
-    RtTblPtr[1].OutputPktAddr = &DummyBuffer; /* just needs to be non-null */
+    RtTblPtr[1].OutputPktAddr = &Buffer; /* just needs to be non-null */
 
     HK_AppData.RuntimeTablePtr = RtTblPtr;
     HK_AppData.CopyTablePtr    = CopyTblPtr;
@@ -1878,11 +1878,11 @@ void Test_HK_SetFlagsToNotPresent(void)
     int32                  EntriesWithDataPresent = 0;
     hk_runtime_tbl_entry_t RtTbl[HK_COPY_TABLE_ENTRIES];
     hk_copy_table_entry_t  CpyTbl[HK_COPY_TABLE_ENTRIES];
-    CFE_SB_Buffer_t        DummyBuffer;
+    CFE_SB_Buffer_t        Buffer;
     int32                  i;
     for (i = 0; i < HK_COPY_TABLE_ENTRIES; i++)
     {
-        RtTbl[i].OutputPktAddr = &DummyBuffer; /* just needs to be non-null */
+        RtTbl[i].OutputPktAddr = &Buffer; /* just needs to be non-null */
         CpyTbl[i].OutputMid    = CFE_SB_ValueToMsgId(CFE_EVS_HK_TLM_MID);
         RtTbl[i].DataPresent   = HK_DATA_PRESENT;
     }
@@ -1928,14 +1928,14 @@ void Test_HK_VerifyCmdLength_LengthOk(void)
     size_t            ExpectedLength = forced_Size;
     CFE_SB_MsgId_t    forced_MsgID   = HK_UT_MID_100;
     CFE_MSG_FcnCode_t forced_CmdCode = 1;
-    CFE_SB_Buffer_t   DummyBuffer;
+    CFE_SB_Buffer_t   Buffer;
 
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetMsgId), &forced_MsgID, sizeof(forced_MsgID), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetFcnCode), &forced_CmdCode, sizeof(forced_CmdCode), false);
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    ReturnValue = HK_VerifyCmdLength(&DummyBuffer, ExpectedLength);
+    ReturnValue = HK_VerifyCmdLength(&Buffer, ExpectedLength);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
@@ -1958,7 +1958,7 @@ void Test_HK_VerifyCmdLength_LengthError(void)
     size_t            ExpectedLength = forced_Size + 1; /* force a mismatch */
     CFE_SB_MsgId_t    forced_MsgID   = HK_UT_MID_100;
     CFE_MSG_FcnCode_t forced_CmdCode = 1;
-    CFE_SB_Buffer_t   DummyBuffer;
+    CFE_SB_Buffer_t   Buffer;
 
     /* event message setup */
     int32 strCmpResult;
@@ -1973,7 +1973,7 @@ void Test_HK_VerifyCmdLength_LengthError(void)
     UT_SetDataBuffer(UT_KEY(CFE_MSG_GetSize), &forced_Size, sizeof(forced_Size), false);
 
     /* Act */
-    ReturnValue = HK_VerifyCmdLength(&DummyBuffer, ExpectedLength);
+    ReturnValue = HK_VerifyCmdLength(&Buffer, ExpectedLength);
 
     call_count_CFE_EVS_SendEvent = UT_GetStubCount(UT_KEY(CFE_EVS_SendEvent));
 
